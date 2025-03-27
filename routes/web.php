@@ -20,6 +20,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('drivers.store');
         Route::get('drivers/{driver}', 'show')
             ->name('drivers.show');
+        Route::put('drivers/{driver}', 'update')
+            ->name('drivers.update');
     });
 
     Route::get('registration', function () {

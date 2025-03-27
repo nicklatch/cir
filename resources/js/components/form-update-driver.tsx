@@ -2,14 +2,15 @@ import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import InputError from "./input-error";
-import { toast } from "sonner";
 import { useForm } from "@inertiajs/react";
 import { Dispatch, FormEventHandler, SetStateAction } from 'react';
 import { LoaderCircle } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
+import { Driver } from "@/types";
 
 
-type CreateDriverForm = {
+type UpdateDriverForm = {
+    id: number;
     first_name: string;
     last_name: string;
     phone_number: string;
@@ -17,26 +18,27 @@ type CreateDriverForm = {
     drive_type: string;
 }
 
-interface CreateDriverFormProps {
+interface UpdateDriverFormProps {
     onFinishCloseDialog?: Dispatch<SetStateAction<boolean>>
+    driver: Driver
 }
 
-export default function DriverForm({ onFinishCloseDialog }: CreateDriverFormProps) {
-    const { data, setData, post, processing, errors, reset } = useForm<Required<CreateDriverForm>>({
-        first_name: '',
-        last_name: '',
-        phone_number: '',
-        car_number: '',
-        drive_type: '',
+export default function UpdateDriverForm({ onFinishCloseDialog, driver }: UpdateDriverFormProps) {
+
+    const { data, setData, put, processing, errors, reset } = useForm<Required<UpdateDriverForm>>({
+        id: driver.id,
+        first_name: driver.first_name,
+        last_name: driver.last_name,
+        phone_number: driver.phone_number,
+        car_number: driver.car_number,
+        drive_type: driver.drive_type,
     })
 
     const submit: FormEventHandler = (e) => {
+        console.log(data.first_name);
         e.preventDefault();
-        post(route('drivers.store'), {
+        put(route('drivers.update', data.id), {
             onFinish: () => {
-                toast("Driver Created", {
-                    description: data.first_name + " " + data.last_name
-                });
                 reset('first_name', 'last_name', 'phone_number', 'car_number', 'drive_type');
                 if (onFinishCloseDialog) onFinishCloseDialog(false);
             },
@@ -110,6 +112,7 @@ export default function DriverForm({ onFinishCloseDialog }: CreateDriverFormProp
                 <RadioGroup
                     id="drive_type"
                     className="flex justify-center p-2"
+                    defaultValue={data.drive_type}
                     onValueChange={(val) => setData('drive_type', val)}
                 >
                     <div className="flex items-center space-x-2">
@@ -123,7 +126,6 @@ export default function DriverForm({ onFinishCloseDialog }: CreateDriverFormProp
                 </RadioGroup>
                 <InputError message={errors.drive_type} className="mt-2" />
             </div>
-
             <div className="flex items-baseline">
                 <Button
                     type='submit'

@@ -1,15 +1,15 @@
 import { DataTable } from '@/components/data-table';
-import CreateDriverForm from '@/components/form-create-driver';
+import DriverForm from '@/components/form-create-driver';
+import UpdateDriverForm from '@/components/form-update-driver';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import AppLayout from '@/layouts/app-layout';
 import { Driver, type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, MoreVertical, Plus } from 'lucide-react';
-import { useState } from 'react';
+import { ArrowUpDown, Edit, Plus, SquareArrowOutUpRight } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -24,11 +24,10 @@ interface IndexProps {
 
 function CreateDriverDialog() {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    console.log(isDialogOpen)
 
     return (
         <Dialog onOpenChange={() => setIsDialogOpen(!isDialogOpen)} open={isDialogOpen}>
-            <DialogTrigger asChild>
+            <DialogTrigger className='ml-auto' asChild>
                 <Button variant="outline"><Plus /> Create Driver</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
@@ -38,9 +37,41 @@ function CreateDriverDialog() {
                         Add a new driver here. Click "Create Driver" when you're done.
                     </DialogDescription>
                 </DialogHeader>
-                <CreateDriverForm ref={setIsDialogOpen} />
+                <DriverForm onFinishCloseDialog={setIsDialogOpen} />
             </DialogContent>
         </Dialog>
+    )
+}
+
+
+interface DriverRowActionsProps {
+    driver: Driver
+}
+function DriverRowActions({ driver }: DriverRowActionsProps) {
+    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+
+    return (
+        <div className='flex'>
+            <Button variant='ghost' className='p-0 m-0' asChild>
+                <Link href={'drivers/' + driver.id}>
+                    <SquareArrowOutUpRight />
+                </Link>
+            </Button>
+            <Dialog onOpenChange={() => setIsEditDialogOpen(!isEditDialogOpen)} open={isEditDialogOpen}>
+                <DialogTrigger className='ml-auto' asChild>
+                    <Button variant="ghost" className='p-0 m-0'><Edit /></Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                        <DialogTitle>Edit Driver</DialogTitle>
+                        <DialogDescription>
+                            Edit the driver here. Click "Save Driver" when you're done.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <UpdateDriverForm onFinishCloseDialog={setIsEditDialogOpen} driver={driver} />
+                </DialogContent>
+            </Dialog >
+        </div>
     )
 }
 
@@ -168,24 +199,7 @@ const columns: Array<ColumnDef<Driver>> = [
             const driver = row.original;
 
             return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <MoreVertical className="h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>
-                            <Link href={"drivers/" + driver.id}>
-                                View Driver
-                            </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>Edit Driver</DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <DriverRowActions driver={driver} />
             )
         },
     },
@@ -198,7 +212,10 @@ export default function DriversIndex({ drivers }: IndexProps) {
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div
                     className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 rounded-xl border md:min-h-min md:p-1 overflow-x-auto ">
-                    <DataTable columns={columns} data={drivers} headerRowChildren={CreateDriverDialog()} />
+                    <DataTable
+                        columns={columns}
+                        data={drivers}
+                        headerRowChildren={<CreateDriverDialog />} />
                 </div>
             </div>
         </AppLayout >

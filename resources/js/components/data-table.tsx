@@ -21,8 +21,19 @@ import {
 import { Button } from "./ui/button";
 import { ReactNode, useState } from "react";
 import { Input } from "./ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "./ui/select";
+import {
+    DropdownMenu,
+    DropdownMenuCheckboxItem,
+    DropdownMenuContent,
+    DropdownMenuTrigger
+} from "./ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
 
 export type ColumnMeta = { id: string; name: string };
@@ -31,32 +42,22 @@ interface DataTableProps<TData, TValue> {
     columns: Array<ColumnDef<TData, TValue>>
     data: Array<TData>
     headerRowChildren?: ReactNode
+    resultsPerPage?: number
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
-    headerRowChildren
+    headerRowChildren,
+    resultsPerPage
 
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-    const [columnSearchFilter, setColumnSearchFilter] = useState<string>("");
+    const [columnSearchFilter, setColumnSearchFilter] = useState<string>("first_name");
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = useState({});
-    const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 15 });
-
-    const columnSearchFilterCapitalized = () => {
-        if (columnSearchFilter == "") {
-            return "..."
-        }
-
-        const x = columnSearchFilter.split("");
-        x[0] = x[0].toUpperCase();
-        const i = x.findIndex((c) => c == "_");
-        x[i + 1] = x[i + 1].toUpperCase();
-        return x.join("").replace("_", " ")
-    }
+    const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: resultsPerPage ?? 15 });
 
     const table = useReactTable({
         data,
@@ -103,10 +104,12 @@ export function DataTable<TData, TValue>({
                             </SelectContent>
                         </Select>
                         <Input
-                            placeholder={String.fromCodePoint(0x2315) + " " + columnSearchFilterCapitalized()}
+                            placeholder={columnSearchFilter
+                                .replace(/^./, (c) => c.toUpperCase())
+                                .replace(/_(.)/, (_, c) => ` ${c.toUpperCase()}`)}
                             value={(table.getColumn(columnSearchFilter)?.getFilterValue() as string) ?? ""}
-                            onChange={(event) =>
-                                table.getColumn(columnSearchFilter)?.setFilterValue(event.target.value)
+                            onChange={(e) =>
+                                table.getColumn(columnSearchFilter)?.setFilterValue(e.target.value)
                             }
                             className="max-w-[250px] border-none"
                             disabled={columnSearchFilter == ""}

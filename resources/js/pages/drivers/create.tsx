@@ -7,6 +7,7 @@ import { type BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
+import { toast } from 'sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -40,7 +41,12 @@ export default function Create() {
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
         post(route('drivers.store'), {
-            onFinish: () => reset('first_name', 'last_name', 'phone_number', 'car_number', 'drive_type'),
+            onFinish: () => {
+                toast("Driver Created", {
+                    description: data.first_name + " " + data.last_name
+                });
+                reset('first_name', 'last_name', 'phone_number', 'car_number', 'drive_type');
+            },
         });
     }
 

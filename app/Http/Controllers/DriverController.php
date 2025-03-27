@@ -19,14 +19,6 @@ class DriverController extends Controller
     }
 
     /**
-     * Show the form for creating a new driver.
-     */
-    public function create()
-    {
-        return Inertia::render('drivers/create');
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)

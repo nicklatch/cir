@@ -16,8 +16,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::controller(DriverController::class)->group(function () {
         Route::get('drivers', 'index')
             ->name('drivers');
-        Route::get('drivers/create', 'create')
-            ->name('drivers.create');
         Route::post('drivers/create', 'store')
             ->name('drivers.store');
         Route::get('drivers/{driver}', 'show')

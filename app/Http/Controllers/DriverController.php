@@ -3,25 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Models\Driver;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class DriverController extends Controller
 {
     /**
      * Display a listing of the drivers.
      */
-    public function index()
+    public function index(): Response
     {
+        $drivers = Cache::remember('drivers', 120, fn () => Driver::toBase()->get());
+
         return Inertia::render('drivers/index', [
-            'drivers' => Driver::all(),
+            'drivers' => $drivers,
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'first_name' => 'required|string|max:255',
@@ -39,7 +44,10 @@ class DriverController extends Controller
             'drive_type' => $request->drive_type,
         ]);
 
-        // TODO: display some sort of toast message showing conformation, event?
+        // TODO: Is there a way to invalidate or update a value?
+
+        Cache::delete('drivers');
+        Cache::put('drivers', Driver::toBase()->get());
 
         return to_route('drivers');
     }
@@ -47,7 +55,7 @@ class DriverController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Driver $driver)
+    public function show(Driver $driver): Response
     {
         return Inertia::render('drivers/show', ['driver' => $driver]);
     }
@@ -55,7 +63,7 @@ class DriverController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Driver $driver)
+    public function update(Request $request, Driver $driver): void
     {
         $request->validate([
             'first_name' => 'required|string|max:255',
@@ -73,6 +81,9 @@ class DriverController extends Controller
             'drive_type' => $request->drive_type,
 
         ]);
+
+        Cache::delete('drivers');
+        Cache::add('drivers', 120, fn () => Driver::all());
     }
 
     /**
@@ -80,6 +91,6 @@ class DriverController extends Controller
      */
     public function destroy(Driver $driver)
     {
-        //
+        $driver->delete();
     }
 }

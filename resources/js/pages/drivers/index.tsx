@@ -1,15 +1,17 @@
 import { DataTable } from '@/components/data-table';
 import DriverForm from '@/components/form-create-driver';
 import UpdateDriverForm from '@/components/form-update-driver';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import AppLayout from '@/layouts/app-layout';
+import { formatPhone } from '@/lib/utils';
 import { Driver, type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown, Edit, Plus, SquareArrowOutUpRight } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -135,9 +137,11 @@ const columns: Array<ColumnDef<Driver>> = [
         },
         cell: ({ row }) => {
             const val: string = row.getValue('drive_type');
-            return (
-                <div className='pl-3'>{val}</div>
-            )
+            if (val == 'FWD') {
+                return <Badge className='ml-3'>{val}</Badge>
+            } else {
+                return <Badge className='ml-3 bg-red-600 text-white'>{val}</Badge>
+            }
         }
     },
     {
@@ -188,9 +192,8 @@ const columns: Array<ColumnDef<Driver>> = [
         accessorKey: "phone_number",
         header: "Phone Number",
         cell: ({ row }) => {
-            const phone: string = row.getValue('phone_number');
-            return (<div> ({phone.slice(0, 3)}) {phone.slice(3, 6)}-{phone.slice(6, 10)} </div>)
-        }
+            return formatPhone(row.getValue('phone_number'));
+        },
     },
     {
         id: "actions",
@@ -211,7 +214,7 @@ export default function DriversIndex({ drivers }: IndexProps) {
             <Head title="Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div
-                    className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 rounded-xl border md:min-h-min md:p-1 overflow-x-auto ">
+                    className="">
                     <DataTable
                         columns={columns}
                         data={drivers}

@@ -15,7 +15,6 @@ interface DriverProps {
 }
 
 export default function Show({ driver }: DriverProps) {
-
     breadcrumbs.push({
         title: driver.first_name + " " + driver.last_name,
         href: '/drivers/' + driver.id

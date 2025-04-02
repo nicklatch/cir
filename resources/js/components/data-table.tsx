@@ -54,7 +54,7 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-    const [columnSearchFilter, setColumnSearchFilter] = useState<string>("first_name");
+    const [columnSearchFilter, setColumnSearchFilter] = useState<string>("");
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = useState({});
     const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: resultsPerPage ?? 15 });
@@ -97,7 +97,7 @@ export function DataTable<TData, TValue>({
                                     .filter((c) => c.getCanFilter())
                                     .map((col) => {
                                         return (<SelectItem key={col.id} value={col.id} className="text-nowrap capitalize">
-                                            {col.id.toString().replace("_", " ")}
+                                            {col.id.toString().replaceAll("_", " ")}
                                         </SelectItem>
                                         )
                                     })}
@@ -138,7 +138,7 @@ export function DataTable<TData, TValue>({
                                                 column.toggleVisibility(!!value)
                                             }
                                         >
-                                            {column.id.toString().replace("_", " ")}
+                                            {column.id.toString().replaceAll("_", " ")}
                                         </DropdownMenuCheckboxItem>
                                     )
                                 })}

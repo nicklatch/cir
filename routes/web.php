@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\DriverController;
+use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\WeatherController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -24,9 +26,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('drivers.update');
     });
 
-    Route::get('registration', function () {
-        return Inertia::render('registration');
-    })->name('registration');
+    Route::controller(RegistrationController::class)->group(function () {
+        Route::get('registration', 'index')
+            ->name('registration');
+        Route::get('registration/{registration}', 'show')
+            ->name('registration.show');
+    });
+
+    Route::get('api/weather', [WeatherController::class, 'index'])
+        ->name('weather');
+
 });
 
 require __DIR__.'/settings.php';

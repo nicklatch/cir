@@ -11,6 +11,8 @@ class Registration extends Model
     /** @use HasFactory<\Database\Factories\RegistrationFactory> */
     use HasFactory;
 
+    protected $with = ['driver'];
+
     protected $fillable = [
         'driver_id',
         'class',
@@ -19,7 +21,7 @@ class Registration extends Model
         'draw_three',
     ];
 
-    public function drver(): BelongsTo
+    public function driver(): BelongsTo
     {
         return $this->belongsTo(Driver::class);
     }

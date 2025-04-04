@@ -31,6 +31,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('registration');
         Route::get('registration/{registration}', 'show')
             ->name('registration.show');
+        Route::post('registration/createDriver', 'storeNewDriver')
+            ->name('registration.storeNewDriver');
+        Route::post('registration/create', 'store')
+            ->name('registration.store');
     });
 
     Route::get('api/weather', [WeatherController::class, 'index'])

@@ -8,7 +8,6 @@ import { Dispatch, FormEventHandler, SetStateAction } from 'react';
 import { LoaderCircle } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 
-
 type CreateDriverForm = {
     first_name: string;
     last_name: string;
@@ -19,9 +18,10 @@ type CreateDriverForm = {
 
 interface CreateDriverFormProps {
     onFinishCloseDialog?: Dispatch<SetStateAction<boolean>>
+    postRoute?: string
 }
 
-export default function DriverForm({ onFinishCloseDialog }: CreateDriverFormProps) {
+export default function DriverForm({ onFinishCloseDialog, postRoute }: CreateDriverFormProps) {
     const { data, setData, post, processing, errors, reset } = useForm<Required<CreateDriverForm>>({
         first_name: '',
         last_name: '',
@@ -32,7 +32,8 @@ export default function DriverForm({ onFinishCloseDialog }: CreateDriverFormProp
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        post(route('drivers.store'), {
+        e.stopPropagation();
+        post(route(postRoute ?? 'drivers.store'), {
             onFinish: () => {
                 toast("Driver Created", {
                     description: data.first_name + " " + data.last_name
@@ -127,7 +128,7 @@ export default function DriverForm({ onFinishCloseDialog }: CreateDriverFormProp
             <div className="flex items-baseline">
                 <Button
                     type='submit'
-                    className='mt-2 w-ful flex-1 h-full rounded-none rounded-bl-md rounded-tl-md'
+                    className='mt-2 w-ful flex-1 h-full rounded-r-none rounded-l-md'
                     tabIndex={6}
                     disabled={processing}
                 >
@@ -135,7 +136,7 @@ export default function DriverForm({ onFinishCloseDialog }: CreateDriverFormProp
                     Save Driver
                 </Button>
                 <Button
-                    className='flex-1 rounded-none rounded-br-md rounded-tr-md h-full'
+                    className='flex-1 rounded-l-none rounded-r-md h-full'
                     variant='destructive'
                     type='reset'
                     onClick={() => reset('first_name', 'last_name', 'phone_number', 'car_number', 'drive_type')}

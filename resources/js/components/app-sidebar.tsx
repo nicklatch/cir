@@ -4,10 +4,10 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, User, NotepadText } from 'lucide-react';
+import { BookOpen, Folder, LayoutGrid, User, NotepadText, Trophy, DollarSign, BookCheck, Grid2x2, Grid2x2Check, Logs } from 'lucide-react';
 import AppLogo from './app-logo';
 
-const mainNavItems: NavItem[] = [
+const quickNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: '/dashboard',
@@ -19,11 +19,44 @@ const mainNavItems: NavItem[] = [
         icon: User,
     },
     {
-        title: 'Registration',
-        href: '/registration',
+        title: 'Points',
+        href: '/points',
+        icon: Logs
+    }
+];
+
+const raceDayNavItems: Array<NavItem> = [
+    {
+        title: "Registration",
+        href: "/registration",
         icon: NotepadText,
     },
-];
+    {
+        title: "Heat Lineups",
+        href: "/heat-lineups",
+        icon: Grid2x2,
+    },
+    {
+        title: "Heat Results",
+        href: "/heat-results",
+        icon: BookCheck,
+    },
+    {
+        title: "Feature Lineups",
+        href: "/feature-lineups",
+        icon: Grid2x2Check,
+    },
+    {
+        title: "Feature Results",
+        href: "/feature-results",
+        icon: Trophy,
+    },
+    {
+        title: "Payouts",
+        href: "/payouts",
+        icon: DollarSign
+    }
+]
 
 const footerNavItems: NavItem[] = [
     {
@@ -54,7 +87,7 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                <NavMain quickItems={quickNavItems} raceDayItems={raceDayNavItems} />
             </SidebarContent>
 
             <SidebarFooter>

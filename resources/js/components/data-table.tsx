@@ -34,7 +34,7 @@ import {
     DropdownMenuContent,
     DropdownMenuTrigger
 } from "./ui/dropdown-menu";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Minus, Plus } from "lucide-react";
 
 export type ColumnMeta = { id: string; name: string };
 
@@ -144,6 +144,22 @@ export function DataTable<TData, TValue>({
                                 })}
                         </DropdownMenuContent>
                     </DropdownMenu>
+                    <div className="flex border gap-2 rounded-md items-center">
+                        <span className="px-2 text-sm font-semibold">Rows Per Page</span>
+                        <div>
+                            <Button
+                                size='sm'
+                                variant='ghost'
+                                onClick={() => setPagination({ pageIndex: pagination.pageIndex, pageSize: pagination.pageSize - 1 })}>
+                                <Minus />
+
+                            </Button>
+                            <span className="px-2">{pagination.pageSize}</span>
+                            <Button size='sm' variant='ghost' onClick={() => setPagination({ pageIndex: pagination.pageIndex, pageSize: pagination.pageSize + 1 })}>
+                                <Plus />
+                            </Button>
+                        </div>
+                    </div>
                 </div>
                 {headerRowChildren}
             </div>

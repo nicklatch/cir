@@ -50,3 +50,13 @@ export type Driver = {
     car_number: string;
     drive_type: string;
 }
+
+export type Registration = {
+    id: number;
+    driver: Driver;
+    class: 'open' | 'fwd_rubber' | 'rwd_rubber' | 'powder_puff' | 'young_guns' | 'studs';
+    week: number;
+    draw_one: number;
+    draw_two: number;
+    draw_three: number;
+}

@@ -16,7 +16,7 @@ class DriverController extends Controller
      */
     public function index(): Response
     {
-        $drivers = Cache::remember('drivers', 120, fn () => Driver::toBase()->get());
+        $drivers = Cache::remember('drivers', 120, fn () => Driver::orderBy('last_name', 'asc')->toBase()->get());
 
         return Inertia::render('drivers/index', [
             'drivers' => $drivers,
@@ -33,7 +33,7 @@ class DriverController extends Controller
             'last_name' => 'required|string|max:255',
             'phone_number' => 'required|string|min:10|max:11',
             'car_number' => 'required|string|min:1|max:5',
-            'drive_type' => 'required|string|max:3',
+            'drive_type' => 'required|string|size:3',
         ]);
 
         Driver::create([
@@ -47,7 +47,7 @@ class DriverController extends Controller
         // TODO: Is there a way to invalidate or update a value?
 
         Cache::delete('drivers');
-        Cache::put('drivers', Driver::toBase()->get());
+        Cache::put('drivers', Driver::orderBy('last_name', 'asc')->toBase()->get());
 
         return to_route('drivers');
     }

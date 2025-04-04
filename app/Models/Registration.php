@@ -15,6 +15,7 @@ class Registration extends Model
 
     protected $fillable = [
         'driver_id',
+        'week',
         'class',
         'draw_one',
         'draw_two',

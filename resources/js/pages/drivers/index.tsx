@@ -20,17 +20,18 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-interface IndexProps {
-    drivers: Array<Driver>
-};
 
-function CreateDriverDialog() {
+interface CreateDriverDialogProps {
+    postRoute?: string
+    tabIndex: number
+}
+export function CreateDriverDialog({ postRoute, tabIndex }: CreateDriverDialogProps) {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     return (
         <Dialog onOpenChange={() => setIsDialogOpen(!isDialogOpen)} open={isDialogOpen}>
-            <DialogTrigger className='ml-auto' asChild>
-                <Button variant="outline"><Plus /> Create Driver</Button>
+            <DialogTrigger tabIndex={tabIndex} className='ml-auto' asChild>
+                <Button variant="outline">{<Plus />} Create Driver</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
@@ -39,12 +40,11 @@ function CreateDriverDialog() {
                         Add a new driver here. Click "Create Driver" when you're done.
                     </DialogDescription>
                 </DialogHeader>
-                <DriverForm onFinishCloseDialog={setIsDialogOpen} />
+                <DriverForm postRoute={postRoute} onFinishCloseDialog={setIsDialogOpen} />
             </DialogContent>
         </Dialog>
     )
 }
-
 
 interface DriverRowActionsProps {
     driver: Driver
@@ -208,6 +208,9 @@ const columns: Array<ColumnDef<Driver>> = [
     },
 ]
 
+interface IndexProps {
+    drivers: Array<Driver>
+};
 export default function DriversIndex({ drivers }: IndexProps) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>

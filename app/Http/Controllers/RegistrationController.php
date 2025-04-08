@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\RaceClass;
+use App\Http\Requests\StoreRegistrationRequest;
 use App\Models\Driver;
 use App\Models\Registration;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -34,57 +32,17 @@ class RegistrationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreRegistrationRequest $request)
     {
-        $vals = $request->validate([
-            'driver' => 'required',
-            'class' => Rule::enum(RaceClass::class),
-            'week' => 'required|integer|min:1|max:10',
-            'draw_one' => [
-                'required',
-                'max:250',
-                'min:1',
-                'different:draw_two',
-                'different:draw_three',
-                Rule::unique('registrations')
-                    ->where(function (Builder $query) use ($request) {
-                        return $query->where('week', $request->week)
-                            ->whereYear('created_at', now()->year);
-                    }),
-            ],
-            'draw_two' => [
-                'required',
-                'max:250',
-                'min:1',
-                'different:draw_one',
-                'different:draw_three',
-                Rule::unique('registrations')
-                    ->where(function (Builder $query) use ($request) {
-                        return $query->where('week', $request->week)
-                            ->whereYear('created_at', now()->year);
-                    }),
-            ],
-            'draw_three' => [
-                'nullable',
-                'max:250',
-                'min:1',
-                'different:draw_one',
-                'different:draw_two',
-                Rule::unique('registrations')
-                    ->where(function (Builder $query) use ($request) {
-                        return $query->where('week', $request->week)
-                            ->whereYear('created_at', now()->year);
-                    }),
-            ],
-        ]);
+        $validated = $request->safe();
 
         Registration::create([
-            'driver_id' => $request->driver['id'],
-            'week' => $request->week,
-            'class' => $request->raceClass,
-            'draw_one' => $request->draw_one,
-            'draw_two' => $request->draw_two,
-            'draw_three' => $request->draw_three,
+            'driver_id' => $validated['driver']['id'],
+            'week' => $validated['week'],
+            'class' => $validated['race_class'],
+            'draw_one' => $validated['draw_one'],
+            'draw_two' => $validated['draw_two'],
+            'draw_three' => $validated['draw_three'],
         ]);
 
         return to_route('registration');

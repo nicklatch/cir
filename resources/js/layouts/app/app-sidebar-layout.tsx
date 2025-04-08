@@ -13,7 +13,7 @@ export default function AppSidebarLayout({ children, breadcrumbs = [] }: PropsWi
             <AppContent variant="sidebar" className='overflow-x-hidden'>
                 <AppSidebarHeader breadcrumbs={breadcrumbs} />
                 {children}
-                <Toaster />
+                <Toaster position='top-right' />
             </AppContent>
         </AppShell>
     );

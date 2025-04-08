@@ -14,7 +14,7 @@ use Inertia\Response;
 class RegistrationController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of Registrations.
      */
     public function index(): Response
     {
@@ -30,7 +30,7 @@ class RegistrationController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created in storage.
      */
     public function store(StoreRegistrationRequest $request)
     {
@@ -50,7 +50,7 @@ class RegistrationController extends Controller
 
     public function storeNewDriver(Request $request): RedirectResponse
     {
-        $request->validate([
+        $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'phone_number' => 'required|string|min:10|max:11',
@@ -59,11 +59,11 @@ class RegistrationController extends Controller
         ]);
 
         Driver::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'phone_number' => $request->phone_number,
-            'car_number' => $request->car_number,
-            'drive_type' => $request->drive_type,
+            'first_name' => $validated['first_name'],
+            'last_name' => $validated['last_name'],
+            'phone_number' => $validated['phone_number'],
+            'car_number' => $validated['car_number'],
+            'drive_type' => $validated['drive_type'],
         ]);
 
         // TODO: Is there a way to invalidate or update a value?

@@ -37,7 +37,7 @@ enum RaceClass {
 type CreateRegistrationForm = {
     week: number | undefined;
     driver: Driver | undefined;
-    raceClass: RaceClass | undefined;
+    race_class: RaceClass | undefined;
     draw_one: number | undefined;
     draw_two: number | undefined;
     draw_three: number | undefined;
@@ -62,6 +62,8 @@ function RwdClassSelectItems() {
     )
 }
 
+
+// TODO: Move CreateRegistrationForm and *props to own component file
 interface CreateRegistrationFormProps {
     drivers: Array<Driver>
 }
@@ -69,7 +71,7 @@ function CreateRegistrationForm({ drivers }: CreateRegistrationFormProps) {
     const { data, setData, clearErrors, post, processing, errors, reset } = useForm<Required<CreateRegistrationForm>>({
         week: undefined,
         driver: undefined,
-        raceClass: undefined,
+        race_class: undefined,
         draw_one: undefined,
         draw_two: undefined,
         draw_three: undefined
@@ -84,10 +86,16 @@ function CreateRegistrationForm({ drivers }: CreateRegistrationFormProps) {
         e.preventDefault();
         post(route('registration.store'), {
             onSuccess: () => {
-                toast("Driver Registered", { description: data.driver?.first_name + " " + data.driver?.last_name });
-                reset('week', 'driver', 'raceClass', 'draw_one', 'draw_two', 'draw_three');
+                toast.success("Driver Registered", { description: data.driver?.first_name + " " + data.driver?.last_name });
+                clearFormHandler();
             }
         })
+    }
+
+    const clearFormHandler = () => {
+        setSelectRenderKey(+new Date());
+        reset('draw_one', 'draw_two', 'draw_three');
+        clearErrors();
     }
 
     useEffect(() => {
@@ -154,7 +162,7 @@ function CreateRegistrationForm({ drivers }: CreateRegistrationFormProps) {
             </div>
             <div>
                 <Label htmlFor='class'>Class</Label>
-                <Select key={altRenderKey('driver')} onValueChange={(val) => setData('raceClass', val as RaceClass)}>
+                <Select key={altRenderKey('driver')} onValueChange={(val) => setData('race_class', val as RaceClass)}>
                     <SelectTrigger
                         id='class'
                         autoFocus
@@ -166,7 +174,7 @@ function CreateRegistrationForm({ drivers }: CreateRegistrationFormProps) {
                         {driveType == 'FWD' ? <FwdClassSelectItems /> : <RwdClassSelectItems />}
                     </SelectContent>
                 </Select>
-                <InputError message={errors.raceClass} />
+                <InputError message={errors.race_class} />
             </div>
             <div className='flex gap-2'>
                 <div className='flex-1'>
@@ -234,10 +242,7 @@ function CreateRegistrationForm({ drivers }: CreateRegistrationFormProps) {
                     className='flex-1 rounded-l-none rounded-r-md h-full'
                     tabIndex={9}
                     variant='destructive'
-                    onClick={() => {
-                        setSelectRenderKey(+new Date());
-                        clearErrors();
-                    }}
+                    onClick={clearFormHandler}
                     type='reset'
                 >
                     Clear

@@ -15,6 +15,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 
+    // Drivers
     Route::controller(DriverController::class)->group(function () {
         Route::get('drivers', 'index')
             ->name('drivers');
@@ -26,6 +27,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('drivers.update');
     });
 
+    // Registrations
     Route::controller(RegistrationController::class)->group(function () {
         Route::get('registration', 'index')
             ->name('registration');

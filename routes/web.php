@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\RegistrationController;
-use App\Http\Controllers\WeatherController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -38,9 +37,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('registration/create', 'store')
             ->name('registration.store');
     });
-
-    Route::get('api/weather', [WeatherController::class, 'index'])
-        ->name('weather');
 
 });
 

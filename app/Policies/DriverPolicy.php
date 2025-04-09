@@ -19,6 +19,11 @@ class DriverPolicy
         return $user->can('view drivers');
     }
 
+    public function show(User $user): bool
+    {
+        return $user->can('view drivers');
+    }
+
     public function update(User $user): bool
     {
         return $user->can('update drivers');

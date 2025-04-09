@@ -50,7 +50,7 @@ class RoleSeeder extends Seeder
         |--------------------------------------------------------------------------
         */
 
-        $role_super_admin = Role::create(['name' => 'Super-Admin']);
+        Role::create(['name' => 'Super-Admin']);
 
         $role_promoter = Role::create(['name' => UserRoles::Promoter->value]);
         $role_promoter->givePermissionTo([

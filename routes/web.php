@@ -5,37 +5,46 @@ use App\Http\Controllers\RegistrationController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('welcome');
-})->name('home');
+Route::redirect('/', '/login')->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 
-    // Drivers
-    Route::controller(DriverController::class)->group(function () {
-        Route::get('drivers', 'index')
-            ->name('drivers');
-        Route::post('drivers/create', 'store')
-            ->name('drivers.store');
-        Route::get('drivers/{driver}', 'show')
-            ->name('drivers.show');
-        Route::put('drivers/{driver}', 'update')
-            ->name('drivers.update');
+    Route::prefix('drivers')->group(function () {
+        Route::controller(DriverController::class)->group(function () {
+            Route::get('', 'index')
+                ->middleware('permission:view drivers')
+                ->name('drivers');
+            Route::get('/{driver}', 'show')
+                ->middleware('permission:view drivers')
+                ->name('drivers.show');
+            Route::put('/{driver}', 'update')
+                ->middleware('permission:edit drivers')
+                ->name('drivers.update');
+            Route::post('/create', 'store')
+                ->middleware('permission:create drivers')
+                ->name('drivers.store');
+        });
     });
 
-    // Registrations
-    Route::controller(RegistrationController::class)->group(function () {
-        Route::get('registration', 'index')
-            ->name('registration');
-        Route::get('registration/{registration}', 'show')
-            ->name('registration.show');
-        Route::post('registration/createDriver', 'storeNewDriver')
-            ->name('registration.storeNewDriver');
-        Route::post('registration/create', 'store')
-            ->name('registration.store');
+    Route::prefix('registration')->group(function () {
+        Route::controller(RegistrationController::class)->group(function () {
+            Route::get('', 'index')
+                ->middleware('permission:view registrations')
+                ->name('registration');
+            Route::get('/{registration}', 'show')
+                ->middleware('permission:view registrations')
+                ->name('registration.show');
+            // FIXME: This seems uneeded, just use drivers.store?
+            Route::post('/createDriver', 'storeNewDriver')
+                ->middleware('permission:create drivers')
+                ->name('registration.storeNewDriver');
+            Route::post('/create', 'store')
+                ->middleware('permission:create registrations')
+                ->name('registration.store');
+        });
     });
 
 });

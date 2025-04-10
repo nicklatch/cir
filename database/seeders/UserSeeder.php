@@ -40,5 +40,11 @@ class UserSeeder extends Seeder
         ]);
         $user_crew->assignRole($role_crew);
 
+        User::factory()->create([
+            'first_name' => 'Roleless',
+            'last_name' => 'User',
+            'email' => 'roleless@example.com',
+        ]);
+
     }
 }

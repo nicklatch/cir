@@ -156,7 +156,7 @@ function CreateRegistrationForm({ drivers }: CreateRegistrationFormProps) {
                             }
                         </SelectContent>
                     </Select>
-                    <CreateDriverDialog tabIndex={3} postRoute='registration.storeNewDriver' />
+                    <CreateDriverDialog tabIndex={3} postRoute='drivers.store' />
                 </div>
                 <InputError message={errors.driver} />
             </div>

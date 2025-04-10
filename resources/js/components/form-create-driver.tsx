@@ -34,8 +34,8 @@ export default function DriverForm({ onFinishCloseDialog, postRoute }: CreateDri
         e.preventDefault();
         e.stopPropagation();
         post(route(postRoute ?? 'drivers.store'), {
-            onFinish: () => {
-                toast("Driver Created", {
+            onSuccess: () => {
+                toast.success("Driver Created", {
                     description: data.first_name + " " + data.last_name
                 });
                 reset('first_name', 'last_name', 'phone_number', 'car_number', 'drive_type');

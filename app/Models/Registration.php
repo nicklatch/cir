@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Represents a Driver's Registration entry
@@ -39,7 +40,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Registration extends Model
 {
     /** @use HasFactory<\Database\Factories\RegistrationFactory> */
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $with = ['driver'];
 
@@ -53,8 +54,8 @@ class Registration extends Model
     ];
 
     /**
-    * Get's the Driver associated with the Registration
-    */
+     * Get's the Driver associated with the Registration
+     */
     public function driver(): BelongsTo
     {
         return $this->belongsTo(Driver::class);

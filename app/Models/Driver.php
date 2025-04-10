@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Represents a Driver
@@ -38,7 +39,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Driver extends Model
 {
     /** @use HasFactory<\Database\Factories\DriverFactory> */
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'first_name',

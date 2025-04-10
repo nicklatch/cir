@@ -37,10 +37,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/{registration}', 'show')
                 ->middleware('permission:view registrations')
                 ->name('registration.show');
-            // FIXME: This seems uneeded, just use drivers.store?
-            Route::post('/createDriver', 'storeNewDriver')
-                ->middleware('permission:create drivers')
-                ->name('registration.storeNewDriver');
             Route::post('/create', 'store')
                 ->middleware('permission:create registrations')
                 ->name('registration.store');

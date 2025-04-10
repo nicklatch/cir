@@ -14,7 +14,7 @@ class DriverController extends Controller
     /**
      * Display a listing of the drivers.
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
         $drivers = Cache::remember('drivers', 120, fn () => Driver::orderBy('last_name', 'asc')->toBase()->get());
 
@@ -49,7 +49,9 @@ class DriverController extends Controller
         Cache::delete('drivers');
         Cache::put('drivers', Driver::orderBy('last_name', 'asc')->toBase()->get());
 
-        return to_route('drivers');
+        return str_contains($request->header('Referer'), 'registration')
+            ? to_route('registration')
+            : to_route('drivers');
     }
 
     /**
@@ -83,7 +85,7 @@ class DriverController extends Controller
         ]);
 
         Cache::delete('drivers');
-        Cache::add('drivers', 120, fn () => Driver::all());
+        Cache::put('drivers', fn () => Driver::orderBy('last_name', 'asc')->toBase()->get(), 120);
     }
 
     /**
@@ -92,5 +94,7 @@ class DriverController extends Controller
     public function destroy(Driver $driver)
     {
         $driver->delete();
+        Cache::delete('drivers');
+        Cache::put('drivers', fn () => Driver::orderBy('last_name', 'asc')->toBase()->get(), 120);
     }
 }

@@ -19,7 +19,7 @@ Future features include:
 ## Authors
 
 - Nick Latcham 
-    - [GitHub](https://www.github.com/octokatherine)
+    - [GitHub](https://www.github.com/nicklatch)
     - [LinkedIn](https://www.linkedin.com/in/nicklatcham/)
     - [Website](https://www.nicklatcham.com)
 

@@ -14,7 +14,7 @@ class DriverController extends Controller
     /**
      * Display a listing of the drivers.
      */
-    public function index(Request $request): Response
+    public function index(): Response
     {
         $drivers = Cache::remember('drivers', 120, fn () => Driver::orderBy('last_name', 'asc')->toBase()->get());
 

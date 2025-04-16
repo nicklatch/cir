@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -42,7 +43,7 @@ class Registration extends Model
     /** @use HasFactory<\Database\Factories\RegistrationFactory> */
     use HasFactory, SoftDeletes;
 
-    protected $with = ['driver'];
+    /* protected $with = ['driver']; */
 
     protected $fillable = [
         'driver_id',
@@ -54,10 +55,22 @@ class Registration extends Model
     ];
 
     /**
-     * Get's the Driver associated with the Registration
+     * Returns the Driver associated with the Registration
+     *
+     * @return BelongsTo<Driver, $this>
      */
     public function driver(): BelongsTo
     {
         return $this->belongsTo(Driver::class);
+    }
+
+    /**
+     * Returns the heats associated with the Registration
+     *
+     * @return HasMany<Heat, $this>
+     */
+    public function heats(): HasMany
+    {
+        return $this->hasMany(Heat::class);
     }
 }

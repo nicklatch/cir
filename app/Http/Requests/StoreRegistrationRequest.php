@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\RaceClass;
 use App\Models\Driver;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
@@ -37,6 +38,7 @@ class StoreRegistrationRequest extends FormRequest
                             ->where('driver_id', $driver->id)
                             ->whereYear('created_at', now()->year);
                     }),
+                Rule::enum(RaceClass::class),
             ],
             'week' => 'required|integer|min:1|max:10',
             'draw_one' => [

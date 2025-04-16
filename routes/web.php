@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\DriverController;
+use App\Http\Controllers\HeatLineupController;
+use App\Http\Controllers\HeatResultController;
 use App\Http\Controllers\RegistrationController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -40,6 +42,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('/create', 'store')
                 ->middleware('permission:create registrations')
                 ->name('registration.store');
+        });
+    });
+
+    Route::prefix('heat-lineups')->group(function () {
+        Route::controller(HeatLineupController::class)->group(function () {
+            Route::get('', 'index')
+                ->name('heat-lineups.index');
+        });
+    });
+
+    Route::prefix('heat-results')->group(function () {
+        Route::controller(HeatResultController::class)->group(function () {
+            Route::get('', 'index')
+                ->name('heat-results.index');
         });
     });
 

@@ -51,6 +51,8 @@ class Driver extends Model
 
     /**
      * Get all Registration's associated with the Driver
+     *
+     * @return HasMany<Registration, $this>
      */
     public function registrations(): HasMany
     {

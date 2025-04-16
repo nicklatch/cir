@@ -2,12 +2,23 @@
 
 use App\Models\Driver;
 use App\Models\User;
+use Database\Seeders\RoleSeeder;
+use Database\Seeders\UserSeeder;
+
+use function Pest\Laravel\seed;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
-test('driver can be created', function () {
-    $user = User::factory()->create();
+beforeEach(function () {
+    app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+    seed(RoleSeeder::class);
+    seed(UserSeeder::class);
+});
 
+test('driver can be created', function () {
+    $user = User::where('first_name', 'Crew')->first();
+
+    $driver = Driver::factory()->create();
     $driver = [
         'first_name' => 'Test',
         'last_name' => 'Driver',

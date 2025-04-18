@@ -9,13 +9,11 @@ use Inertia\Inertia;
 
 Route::redirect('/', '/login')->name('home');
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
+Route::middleware(['auth', 'verified'])->group(function (): void {
+    Route::get('dashboard', fn() => Inertia::render('dashboard'))->name('dashboard');
 
-    Route::prefix('drivers')->group(function () {
-        Route::controller(DriverController::class)->group(function () {
+    Route::prefix('drivers')->group(function (): void {
+        Route::controller(DriverController::class)->group(function (): void {
             Route::get('', 'index')
                 ->middleware('permission:view drivers')
                 ->name('drivers');
@@ -31,8 +29,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
     });
 
-    Route::prefix('registration')->group(function () {
-        Route::controller(RegistrationController::class)->group(function () {
+    Route::prefix('registration')->group(function (): void {
+        Route::controller(RegistrationController::class)->group(function (): void {
             Route::get('', 'index')
                 ->middleware('permission:view registrations')
                 ->name('registration');
@@ -45,15 +43,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
     });
 
-    Route::prefix('heat-lineups')->group(function () {
-        Route::controller(HeatLineupController::class)->group(function () {
+    Route::prefix('heat-lineups')->group(function (): void {
+        Route::controller(HeatLineupController::class)->group(function (): void {
             Route::get('', 'index')
                 ->name('heat-lineups.index');
         });
     });
 
-    Route::prefix('heat-results')->group(function () {
-        Route::controller(HeatResultController::class)->group(function () {
+    Route::prefix('heat-results')->group(function (): void {
+        Route::controller(HeatResultController::class)->group(function (): void {
             Route::get('', 'index')
                 ->name('heat-results.index');
         });

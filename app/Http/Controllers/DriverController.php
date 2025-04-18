@@ -91,7 +91,7 @@ class DriverController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Driver $driver)
+    public function destroy(Driver $driver): void
     {
         $driver->delete();
         Cache::delete('drivers');

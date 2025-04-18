@@ -32,12 +32,10 @@ class StoreRegistrationRequest extends FormRequest
             'driver' => 'required',
             'race_class' => [
                 Rule::unique('registrations', 'class')
-                    ->where(function (Builder $query) use ($request, $driver) {
-                        return $query
-                            ->where('week', $request->week)
-                            ->where('driver_id', $driver->id)
-                            ->whereYear('created_at', now()->year);
-                    }),
+                    ->where(fn(Builder $query) => $query
+                        ->where('week', $request->week)
+                        ->where('driver_id', $driver->id)
+                        ->whereYear('created_at', now()->year)),
                 Rule::enum(RaceClass::class),
             ],
             'week' => 'required|integer|min:1|max:10',
@@ -48,10 +46,8 @@ class StoreRegistrationRequest extends FormRequest
                 'different:draw_two',
                 'different:draw_three',
                 Rule::unique('registrations')
-                    ->where(function (Builder $query) use ($request) {
-                        return $query->where('week', $request->week)
-                            ->whereYear('created_at', now()->year);
-                    }),
+                    ->where(fn(Builder $query) => $query->where('week', $request->week)
+                        ->whereYear('created_at', now()->year)),
             ],
             'draw_two' => [
                 'required',
@@ -60,10 +56,8 @@ class StoreRegistrationRequest extends FormRequest
                 'different:draw_one',
                 'different:draw_three',
                 Rule::unique('registrations')
-                    ->where(function (Builder $query) use ($request) {
-                        return $query->where('week', $request->week)
-                            ->whereYear('created_at', now()->year);
-                    }),
+                    ->where(fn(Builder $query) => $query->where('week', $request->week)
+                        ->whereYear('created_at', now()->year)),
             ],
             'draw_three' => [
                 'nullable',
@@ -72,10 +66,8 @@ class StoreRegistrationRequest extends FormRequest
                 'different:draw_one',
                 'different:draw_two',
                 Rule::unique('registrations')
-                    ->where(function (Builder $query) use ($request) {
-                        return $query->where('week', $request->week)
-                            ->whereYear('created_at', now()->year);
-                    }),
+                    ->where(fn(Builder $query) => $query->where('week', $request->week)
+                        ->whereYear('created_at', now()->year)),
             ],
         ];
     }

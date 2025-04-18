@@ -1,17 +1,19 @@
 includes:
     - vendor/larastan/larastan/extension.neon
     - vendor/nesbot/carbon/extension.neon
+    - vendor/yamadashy/phpstan-friendly-formatter/extension.neon
 
 parameters:
-
     paths:
         - app/
+        - config/
+        - database/
+        - lang/
+        - routes/
+        - tests/
 
     # Level 10 is the highest level
     level: 6
 
-#    ignoreErrors:
-#        - '#PHPDoc tag @var#'
-#
-#excludePaths:
-#    - ./vendor/*
+    errorFormat: friendly
+    reportUnmatchedIgnoredErrors: true

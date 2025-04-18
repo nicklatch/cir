@@ -4,7 +4,7 @@ namespace App\Services;
 
 class WeatherService
 {
-    public static function index()
+    public static function index(): string
     {
 
         $client = new \GuzzleHttp\Client;

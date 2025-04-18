@@ -14,7 +14,7 @@ enum RaceClass: string
     {
         $result = [];
         foreach (self::cases() as $class) {
-            array_push($result, $class->value);
+            $result[] = $class->value;
         }
 
         return $result;

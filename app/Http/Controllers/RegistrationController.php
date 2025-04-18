@@ -16,9 +16,7 @@ class RegistrationController extends Controller
      */
     public function index(): Response
     {
-        $drivers = Cache::remember('drivers', 120, function () {
-            return Driver::orderBy('last_name', 'asc')->toBase()->get();
-        });
+        $drivers = Cache::remember('drivers', 120, fn() => Driver::orderBy('last_name', 'asc')->toBase()->get());
 
         return Inertia::render('registration/index', [
             'registrations' => Registration::with('driver')

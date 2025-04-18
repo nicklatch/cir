@@ -9,13 +9,13 @@ use function Pest\Laravel\seed;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
-beforeEach(function () {
+beforeEach(function (): void {
     app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
     seed(RoleSeeder::class);
     seed(UserSeeder::class);
 });
 
-test('driver can be created', function () {
+test('driver can be created', function (): void {
     $user = User::where('first_name', 'Crew')->first();
     $driver = Driver::factory()->create();
 
